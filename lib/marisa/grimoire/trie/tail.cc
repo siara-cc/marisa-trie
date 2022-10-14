@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "marisa/grimoire/algorithm.h"
 #include "marisa/grimoire/trie/state.h"
 #include "marisa/grimoire/trie/tail.h"
@@ -80,7 +81,9 @@ bool Tail::match(Agent &agent, std::size_t offset) const {
 
   State &state = agent.state();
   if (end_flags_.empty()) {
+printf("Buf: %s\n", &buf_[offset]);
     const char * const ptr = &buf_[offset] - state.query_pos();
+printf("Ptr: %s\n", ptr);
     do {
       if (ptr[state.query_pos()] != agent.query()[state.query_pos()]) {
         return false;
@@ -155,9 +158,13 @@ void Tail::swap(Tail &rhs) {
 
 void Tail::build_(Vector<Entry> &entries, Vector<UInt32> *offsets,
     TailMode mode) {
+  printf("Start:");
   for (std::size_t i = 0; i < entries.size(); ++i) {
     entries[i].set_id(i);
+    if (entries[i].length() > 1)
+      printf("%.*s\n", entries[i].ptr(), entries[i].length());
   }
+  printf("end ----------------------------------------------------------------------------------------");
   Algorithm().sort(entries.begin(), entries.end());
 
   Vector<UInt32> temp_offsets;
@@ -174,8 +181,7 @@ void Tail::build_(Vector<Entry> &entries, Vector<UInt32> *offsets,
       ++match;
     }
     if ((match == current.length()) && (last->length() != 0)) {
-      temp_offsets[current.id()] = (UInt32)(
-          temp_offsets[last->id()] + (last->length() - match));
+      temp_offsets[current.id()] = (UInt32) (temp_offsets[last->id()] + (last->length() - match));
     } else {
       temp_offsets[current.id()] = (UInt32)buf_.size();
       for (std::size_t j = 1; j <= current.length(); ++j) {

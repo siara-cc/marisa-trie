@@ -101,7 +101,7 @@ class FlatVector {
       ++value_size;
       max_value >>= 1;
     }
-
+cout << "Value size: " << value_size << endl;
     std::size_t num_units = values.empty() ? 0 : (64 / MARISA_WORD_SIZE);
     if (value_size != 0) {
       num_units = (std::size_t)(

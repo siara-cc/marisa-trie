@@ -8,6 +8,8 @@
 #include "marisa/grimoire/trie/state.h"
 #include "marisa/grimoire/trie/louds-trie.h"
 
+using namespace std;
+
 namespace marisa {
 namespace grimoire {
 namespace trie {
@@ -253,6 +255,8 @@ void LoudsTrie::build_(Keyset &keyset, const Config &config) {
     keys[i].set_weight(keyset[i].weight());
   }
 
+  cout << "NumTries: " << config.num_tries() << endl;
+
   Vector<UInt32> terminals;
   build_trie(keys, &terminals, config, 1);
 
@@ -297,6 +301,7 @@ void LoudsTrie::build_trie(Vector<T> &keys,
 
   Vector<UInt32> next_terminals;
   if (!keys.empty()) {
+    cout << "Keys not empty" << endl;
     build_next_trie(keys, &next_terminals, config, trie_id);
   }
 
@@ -380,7 +385,7 @@ void LoudsTrie::build_current_trie(Vector<T> &keys,
     if (node_id == 0) {
       num_l1_nodes_ = w_ranges.size();
     }
-
+cout << "Num L1 nodes: " << num_l1_nodes_ << endl;
     for (std::size_t i = 0; i < w_ranges.size(); ++i) {
       WeightedRange &w_range = w_ranges[i];
       std::size_t key_pos = w_range.key_pos() + 1;
@@ -433,6 +438,7 @@ void LoudsTrie::build_current_trie(Vector<T> &keys,
 template <>
 void LoudsTrie::build_next_trie(Vector<Key> &keys,
     Vector<UInt32> *terminals, const Config &config, std::size_t trie_id) {
+  cout << "NumTries: " << config.num_tries() << endl;
   if (trie_id == config.num_tries()) {
     Vector<Entry> entries;
     entries.resize(keys.size());
@@ -457,6 +463,7 @@ void LoudsTrie::build_next_trie(Vector<Key> &keys,
 template <>
 void LoudsTrie::build_next_trie(Vector<ReverseKey> &keys,
     Vector<UInt32> *terminals, const Config &config, std::size_t trie_id) {
+  cout << "RevNumTries: " << config.num_tries() << endl;
   if (trie_id == config.num_tries()) {
     Vector<Entry> entries;
     entries.resize(keys.size());
