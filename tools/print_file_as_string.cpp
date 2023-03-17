@@ -1,10 +1,10 @@
 #include <stdio.h>
 
-int main() {
+int main(int argc, char *argv[]) {
 
   FILE *fp;
 
-  fp = fopen("word_freq_250k.msa", "r");
+  fp = fopen(argv[1], "r");
   while (!feof(fp)) {
     int c = fgetc(fp);
     if (c == -1)
